@@ -1,0 +1,70 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Node dependencies (React)
+node_modules/
+.pnp/
+.pnp.js
+
+# PHP vendor directory
+/vendor/
+
+# Build output for React
+/build/
+
+# Production environment for PHP
+/public_html/
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+
+# Composer files (PHP)
+composer.phar
+composer.lock
+
+# Local environment variables
+.env
+.env.local
+.env.development
+.env.development.local
+.env.testing
+.env.testing.local
+.env.production
+.env.production.local
+
+# PHPUnit result cache
+.phpunit.result.cache
+
+# Coverage directory used by tools like Jest or PHP Code Coverage
+/coverage/
+
+# Laravel (or any PHP framework) cache
+/bootstrap/cache/
+
+# Miscellaneous system files
+.DS_Store
+Thumbs.db
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak
+
+# Ignore Composer's vendor binaries
+/vendor/bin/
+
+# Ignore uploaded font files
+/uploads/fonts/
+
+# Git specific
+.gitignore
