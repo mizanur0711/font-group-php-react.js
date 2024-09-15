@@ -1,13 +1,30 @@
 import React from 'react';
+import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import '../App.css';
+import '../App.css'; // Ensure this file contains the necessary CSS for preview images
 
-function FontList({ fonts }) {
+function FontList({ fonts, onDelete }) {
     console.log('FontList received fonts:', fonts);
 
     const handleDelete = (id) => {
-        console.log('Delete font with ID:', id);
+        if (window.confirm("Are you sure you want to delete this font?")) {
+            axios.post('http://localhost:8000/php-backend/delete_font.php', new URLSearchParams({ id }))
+                .then(response => {
+                    console.log('Delete response:', response.data);
+
+                    if (response.data.success) {
+                        alert('Font deleted successfully!');
+                        if (onDelete) onDelete(); // Trigger re-fetch of the font list
+                    } else {
+                        alert(`Failed to delete font: ${response.data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting font:', error);
+                    alert('An error occurred while trying to delete the font.');
+                });
+        }
     };
 
     return (
