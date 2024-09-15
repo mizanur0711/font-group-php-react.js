@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function FontGroup() {
     const [fonts, setFonts] = useState([]);
-    const [rows, setRows] = useState([{ fontId: '', fontName: '', dummyField1: '', dummyField2: '' }]);
+    const [rows, setRows] = useState([{ fontId: '', fontName: ''}]);
     const [selectedFonts, setSelectedFonts] = useState([]);
     const [groupName, setGroupName] = useState('');
 
@@ -25,7 +25,7 @@ function FontGroup() {
 
     // Add a new row to the table
     const addRow = () => {
-        setRows([...rows, { fontId: '', fontName: '', dummyField1: '', dummyField2: '' }]);
+        setRows([...rows, { fontId: '', fontName: ''}]);
     };
 
     // Handle font selection in a row
@@ -80,9 +80,7 @@ function FontGroup() {
         const data = {
             group_name: groupName,
             fonts: rows.map(row => ({
-                font_id: row.fontId,
-                dummy1: row.dummyField1,
-                dummy2: row.dummyField2
+                font_id: row.fontId
             }))
         };
 
@@ -116,18 +114,17 @@ function FontGroup() {
 
             <TableContainer component={Paper} style={{ marginTop: '20px' }}>
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Select Font</TableCell>
-                            <TableCell>Font Name</TableCell>
-                            <TableCell>Dummy Field 1</TableCell>
-                            <TableCell>Dummy Field 2</TableCell>
-                        </TableRow>
-                    </TableHead>
                     <TableBody>
                         {rows.map((row, index) => (
                             <TableRow key={index}>
-                                {/* Font Selection */}
+                                <TableCell>
+                                    <TextField
+                                        label="Font Name"
+                                        variant="outlined"
+                                        value={row.fontName}
+                                        fullWidth
+                                    />
+                                </TableCell>
                                 <TableCell>
                                     <Select
                                         value={row.fontId}
@@ -154,22 +151,12 @@ function FontGroup() {
                                     </Select>
                                 </TableCell>
 
-                                {/* Font Name (Display) */}
-                                <TableCell>
-                                    <TextField
-                                        value={row.fontName}
-                                        disabled
-                                        fullWidth
-                                    />
-                                </TableCell>
-
                                 {/* Dummy Field 1 */}
                                 <TableCell>
                                     <TextField
-                                        placeholder="Dummy Field 1"
+                                        label="Specific Size"
+                                        variant="outlined"
                                         type="number"
-                                        value={row.dummyField1}
-                                        onChange={(e) => handleInputChange(index, 'dummyField1', e.target.value)}
                                         fullWidth
                                     />
                                 </TableCell>
@@ -177,10 +164,9 @@ function FontGroup() {
                                 {/* Dummy Field 2 */}
                                 <TableCell>
                                     <TextField
-                                        placeholder="Dummy Field 2"
+                                        label="Price Change"
+                                        variant="outlined"
                                         type="number"
-                                        value={row.dummyField2}
-                                        onChange={(e) => handleInputChange(index, 'dummyField2', e.target.value)}
                                         fullWidth
                                     />
                                 </TableCell>
