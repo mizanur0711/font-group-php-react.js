@@ -1,6 +1,20 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header('Content-Type: application/json');
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "password";
+$dbname = "font-group";
 
-echo json_encode(['message' => 'Welcome to the Font Group System API']);
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    echo json_encode(["status" => "error", "message" => "Connection failed: " . $conn->connect_error]);
+} else {
+    echo json_encode(["status" => "success", "message" => "Connected to the database successfully!"]);
+}
+
+// Close connection
+$conn->close();
 ?>
