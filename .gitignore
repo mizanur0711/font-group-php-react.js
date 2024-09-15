@@ -61,7 +61,7 @@ yarn-error.log*
 *.bak
 
 # Ignore Composer's vendor binaries
-/vendor/bin/
+php-backend/vendor/bin/
 
 # Ignore uploaded font files
 /uploads/fonts/
