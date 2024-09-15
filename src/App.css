@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.preview-image {
+  max-width: 200px; /* Adjust this value to make the image larger or smaller */
+  max-height: 200px; /* Adjust this value to make the image larger or smaller */
+  width: auto;
+  height: auto;
+  object-fit: contain; /* Ensures the image maintains its aspect ratio */
+}
+
+

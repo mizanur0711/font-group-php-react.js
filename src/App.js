@@ -1,27 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Container, Typography } from '@mui/material';
+// App.jsx
+import React, { useState, useEffect } from 'react';
+import FontUpload from './components/FontUpload';
+import FontList from './components/FontList';
+import { Container } from '@mui/material';
+import axios from 'axios';
 
 function App() {
-    const [message, setMessage] = useState('');
+    const [fonts, setFonts] = useState([]);
 
+    // Function to fetch the font list
+    const fetchFonts = () => {
+        axios.get('http://localhost:8000/php-backend/get_fonts.php')
+            .then(response => {
+                if (response.data.status === 'success') {
+                    setFonts(response.data.fonts);
+                }
+            })
+            .catch(error => console.error('Error fetching fonts:', error));
+    };
+
+    // Fetch fonts on initial render
     useEffect(() => {
-        fetch('http://localhost:8000/index.php')
-            .then((response) => response.json())
-            .then((data) => setMessage(data.message))
-            .catch((error) => console.error('Error fetching message:', error));
+        fetchFonts();
     }, []);
+
+    // Function to refresh the font list
+    const refreshFontList = () => {
+        fetchFonts();
+    };
 
     return (
         <Container>
-            <Typography variant="h4" component="h1" gutterBottom>
-                Font Group System
-            </Typography>
-            <Typography variant="h6">
-                {message ? message : 'Loading...'}
-            </Typography>
-            <Button variant="contained" color="primary">
-                testing
-            </Button>
+            <FontUpload onUpload={refreshFontList} />
+            <FontList fonts={fonts} onRefresh={fetchFonts} />
         </Container>
     );
 }
