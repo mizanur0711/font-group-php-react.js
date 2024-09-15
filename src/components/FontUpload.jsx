@@ -1,12 +1,12 @@
 import React from 'react';
 import { DropzoneArea } from 'react-mui-dropzone';
 import { Grid, Typography } from '@mui/material';
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'; // Import a custom icon
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import axios from 'axios';
 
-function FontUpload() {
+function FontUpload({ onUpload }) {
     const handleChange = (files) => {
-        if (files.length === 0) return; // No files selected
+        if (files.length === 0) return;
 
         const formData = new FormData();
         formData.append('font', files[0]);
@@ -15,11 +15,19 @@ function FontUpload() {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(response => {
-                console.log('Upload successful!');
+
+                if (response.data.status) {
+                    if (onUpload) onUpload();
+                } else {
+                    console.error('Upload failed:', response.data.message);
+                }
             })
-            .catch(error => console.error('Upload failed:', error));
+            .catch(error => {
+                console.error('Upload failed:', error);
+            });
     };
-    //change text color and icon color
+
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -35,8 +43,8 @@ function FontUpload() {
                             </Typography>
                         </div>
                     }
-                    filesLimit={1} // Optional: limit the number of files
-                    showPreviewsInDropzone={false} // Hide preview of files in the dropzone
+                    filesLimit={1}
+                    showPreviewsInDropzone={false}
                 />
             </Grid>
         </Grid>

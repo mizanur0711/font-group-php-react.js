@@ -1,26 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import '../App.css'; // Make sure this CSS file contains the .preview-image class
+import '../App.css';
 
-function FontList() {
-    const [fonts, setFonts] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:8000/php-backend/get_fonts.php')
-            .then(response => {
-                if (response.data.status === 'success') {
-                    setFonts(response.data.fonts);
-                } else {
-                    console.error('Failed to fetch fonts:', response.data.message);
-                }
-            })
-            .catch(error => console.error('Error fetching fonts:', error));
-    }, []);
+function FontList({ fonts }) {
+    console.log('FontList received fonts:', fonts);
 
     const handleDelete = (id) => {
-        // Implement delete functionality
         console.log('Delete font with ID:', id);
     };
 
