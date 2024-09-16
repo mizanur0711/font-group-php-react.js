@@ -1,6 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography } from '@mui/material';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    IconButton,
+    Typography,
+    Container
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../App.css'; // Ensure this file contains the necessary CSS for preview images
 
@@ -28,7 +39,15 @@ function FontList({ fonts, onDelete }) {
     };
 
     return (
-        <TableContainer component={Paper}>
+        <Container >
+            <Paper className="custom-container">
+            <Typography variant="h4" component="h4" gutterBottom>
+                Our Fonts
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+                rowse a list of Zepto fonts to build your font group
+            </Typography>
+        <TableContainer>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -62,6 +81,8 @@ function FontList({ fonts, onDelete }) {
                 </TableBody>
             </Table>
         </TableContainer>
+            </Paper>
+        </Container>
     );
 }
 

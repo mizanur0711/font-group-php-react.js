@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    IconButton,
+    Container
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import '../App.css';
 
-function FontGroupList() {
+function FontGroupList({ refreshFontGroups }) {
     const [fontGroups, setFontGroups] = useState([]);
 
     useEffect(() => {
@@ -21,7 +32,7 @@ function FontGroupList() {
             .catch(error => {
                 console.error('Error fetching font groups:', error);
             });
-    }, []);
+    }, [refreshFontGroups]);
 
     const handleEdit = (id) => {
         // Handle edit functionality
@@ -45,10 +56,11 @@ function FontGroupList() {
     };
 
     return (
-        <div>
+        <Container>
+            <Paper className="custom-container">
             <h2>Font Groups</h2>
 
-            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+            <TableContainer style={{ marginTop: '20px' }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -77,7 +89,8 @@ function FontGroupList() {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </div>
+            </Paper>
+        </Container>
     );
 }
 

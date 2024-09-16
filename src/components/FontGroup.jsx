@@ -1,15 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, Button } from '@mui/material';
+import {
+    TextField,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Paper,
+    Select,
+    MenuItem,
+    Button,
+    Typography,
+    Container
+} from '@mui/material';
 import axios from 'axios';
+import FontGroupList from './FontGroupList';
+import '../App.css';
+
 
 function FontGroup() {
     const [fonts, setFonts] = useState([]);
-    const [rows, setRows] = useState([{ fontId: '', fontName: ''}]);
+    const [rows, setRows] = useState([{ fontId: '', fontName: '' }]);
     const [selectedFonts, setSelectedFonts] = useState([]);
     const [groupName, setGroupName] = useState('');
+    const [refreshFontGroups, setRefreshFontGroups] = useState(false);
 
     useEffect(() => {
-        // Fetch fonts from the backend
         axios.get('http://localhost:8000/php-backend/get_fonts.php')
             .then(response => {
                 if (response.data.status === 'success') {
@@ -23,18 +39,15 @@ function FontGroup() {
             });
     }, []);
 
-    // Add a new row to the table
     const addRow = () => {
-        setRows([...rows, { fontId: '', fontName: ''}]);
+        setRows([...rows, { fontId: '', fontName: '' }]);
     };
 
-    // Handle font selection in a row
     const handleFontSelect = (index, selectedFontId) => {
         const selectedFont = fonts.find((font) => font.id === selectedFontId);
         const newRows = [...rows];
         const newSelectedFonts = [...selectedFonts];
 
-        // If a font was previously selected in this row, remove it from the selected list
         if (newRows[index].fontId) {
             const prevSelectedIndex = newSelectedFonts.indexOf(newRows[index].fontId);
             if (prevSelectedIndex !== -1) {
@@ -42,11 +55,11 @@ function FontGroup() {
             }
         }
 
-        // Update the row with the new font selection
+
         newRows[index].fontId = selectedFontId;
         newRows[index].fontName = selectedFont ? selectedFont.font_name : '';
 
-        // Add the newly selected font to the selected fonts list
+
         if (selectedFontId) {
             newSelectedFonts.push(selectedFontId);
         }
@@ -55,28 +68,19 @@ function FontGroup() {
         setSelectedFonts(newSelectedFonts);
     };
 
-    // Handle input changes for dummy fields
-    const handleInputChange = (index, field, value) => {
-        const newRows = [...rows];
-        newRows[index][field] = value;
-        setRows(newRows);
-    };
-
-    // Get the list of fonts available for selection in each row (filter out already selected fonts)
     const getAvailableFonts = () => {
         return fonts.filter((font) => !selectedFonts.includes(font.id));
     };
 
-    // Handle the "Create" button click
+
     const handleCreate = () => {
-        // Prepare the font IDs and dummy field data
-        const fontIds = rows.map(row => row.fontId).filter(id => id); // Only get non-empty font IDs
-        if (!groupName || fontIds.length === 0) {
-            alert('Please enter a group name and select at least one font.');
+        const fontIds = rows.map(row => row.fontId).filter(id => id);
+        if (!groupName || fontIds.length < 2) {
+            alert('Please enter a group name and select at least two fonts.');
             return;
         }
 
-        // Data to send to the backend
+
         const data = {
             group_name: groupName,
             fonts: rows.map(row => ({
@@ -84,11 +88,13 @@ function FontGroup() {
             }))
         };
 
-        // Send data to the backend for creating the group
         axios.post('http://localhost:8000/php-backend/create_font_group.php', data)
             .then(response => {
                 if (response.data.status === 'success') {
                     alert('Font group created successfully!');
+                    setGroupName('');
+                    setRows([{ fontId: '', fontName: '' }]);
+                    setRefreshFontGroups(prev => !prev);
                 } else {
                     alert('Error creating font group: ' + response.data.message);
                 }
@@ -100,93 +106,101 @@ function FontGroup() {
     };
 
     return (
-        <div>
-            <h2>Create Font Group</h2>
+        <Container>
+            <Paper className="custom-container">
+                <Typography variant="h4" component="h4" gutterBottom>
+                    Create Font Group
+                </Typography>
+                <Typography variant="body1" component="p" gutterBottom>
+                    You have to select at least two fonts
+                </Typography>
 
-            {/* Group Name Input */}
-            <TextField
-                label="Group Name"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-                fullWidth
-                style={{ marginBottom: '20px' }}
-            />
 
-            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
-                <Table>
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={index}>
-                                <TableCell>
-                                    <TextField
-                                        label="Font Name"
-                                        variant="outlined"
-                                        value={row.fontName}
-                                        fullWidth
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <Select
-                                        value={row.fontId}
-                                        onChange={(e) => handleFontSelect(index, e.target.value)}
-                                        displayEmpty
-                                        fullWidth
-                                        renderValue={(selected) => {
-                                            if (selected) {
-                                                return fonts.find((font) => font.id === selected)?.font_name || 'Select Font';
-                                            }
-                                            return 'Select Font';
-                                        }}
-                                    >
-                                        <MenuItem value=""><em>Select Font</em></MenuItem>
-                                        {getAvailableFonts().length > 0 ? (
-                                            getAvailableFonts().map((font) => (
-                                                <MenuItem key={font.id} value={font.id}>
-                                                    {font.font_name}
-                                                </MenuItem>
-                                            ))
-                                        ) : (
-                                            <MenuItem disabled>No fonts available</MenuItem>
-                                        )}
-                                    </Select>
-                                </TableCell>
+                <TextField
+                    label="Group Name"
+                    variant="outlined"
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    fullWidth
+                    style={{ marginBottom: '20px' }}
+                />
 
-                                {/* Dummy Field 1 */}
-                                <TableCell>
-                                    <TextField
-                                        label="Specific Size"
-                                        variant="outlined"
-                                        type="number"
-                                        fullWidth
-                                    />
-                                </TableCell>
+                <TableContainer style={{ marginTop: '20px' }}>
+                    <Table>
+                        <TableBody>
+                            {rows.map((row, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <TextField
+                                            label="Font Name"
+                                            variant="outlined"
+                                            value={row.fontName}
+                                            fullWidth
+                                        />
+                                    </TableCell>
 
-                                {/* Dummy Field 2 */}
-                                <TableCell>
-                                    <TextField
-                                        label="Price Change"
-                                        variant="outlined"
-                                        type="number"
-                                        fullWidth
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                    <TableCell>
+                                        <Select
+                                            value={row.fontId}
+                                            onChange={(e) => handleFontSelect(index, e.target.value)}
+                                            displayEmpty
+                                            fullWidth
+                                            renderValue={(selected) => {
+                                                if (selected) {
+                                                    return fonts.find((font) => font.id === selected)?.font_name || 'Select Font';
+                                                }
+                                                return 'Select Font';
+                                            }}
+                                        >
+                                            <MenuItem value=""><em>Select Font</em></MenuItem>
+                                            {getAvailableFonts().length > 0 ? (
+                                                getAvailableFonts().map((font) => (
+                                                    <MenuItem key={font.id} value={font.id}>
+                                                        {font.font_name}
+                                                    </MenuItem>
+                                                ))
+                                            ) : (
+                                                <MenuItem disabled>No fonts available</MenuItem>
+                                            )}
+                                        </Select>
+                                    </TableCell>
 
-            {/* Buttons below the last row */}
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
-                <Button onClick={addRow} variant="contained" color="primary">
-                    Add Row
-                </Button>
+                                    <TableCell>
+                                        <TextField
+                                            label="Specific Size"
+                                            variant="outlined"
+                                            type="number"
+                                            fullWidth
+                                        />
+                                    </TableCell>
 
-                <Button onClick={handleCreate} variant="contained" color="success">
-                    Create
-                </Button>
-            </div>
-        </div>
+                                    <TableCell>
+                                        <TextField
+                                            label="Price Change"
+                                            variant="outlined"
+                                            type="number"
+                                            fullWidth
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
+                    <Button onClick={addRow} variant="contained" color="primary">
+                        Add Row
+                    </Button>
+
+                    <Button onClick={handleCreate} variant="contained" color="success">
+                        Create
+                    </Button>
+                </div>
+            </Paper>
+
+            <FontGroupList refreshFontGroups={refreshFontGroups} />
+        </Container>
     );
 }
 

@@ -4,7 +4,6 @@ import FontList from './components/FontList';
 import { Container } from '@mui/material';
 import axios from 'axios';
 import FontGroup from "./components/FontGroup";
-import FontGroupList from "./components/FontGroupList";
 
 function App() {
     const [fonts, setFonts] = useState([]);
@@ -36,7 +35,6 @@ function App() {
             <FontUpload onUpload={refreshFontList} />
             <FontList fonts={fonts} onDelete={refreshFontList}/>
             <FontGroup/>
-            <FontGroupList/>
         </Container>
     );
 }

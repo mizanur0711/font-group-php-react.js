@@ -1,19 +1,9 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+require 'header.php';
+require 'database.php';
 
-// Allow specific HTTP methods (GET, POST, etc.)
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-
-// Allow specific headers (if needed, such as content-type for JSON)
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
-$servername = "localhost";
-$username = "root";
-$password = "password";
-$dbname = "font-group";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+$db = new Database();
+$conn = $db->getConnection();
 
 if ($conn->connect_error) {
     die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));

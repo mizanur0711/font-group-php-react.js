@@ -1,8 +1,9 @@
 import React from 'react';
 import { DropzoneArea } from 'react-mui-dropzone';
-import { Grid, Typography } from '@mui/material';
+import {Container, Grid, Paper, Typography} from '@mui/material';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import axios from 'axios';
+import '../App.css';
 
 function FontUpload({ onUpload }) {
     const handleChange = (files) => {
@@ -29,6 +30,14 @@ function FontUpload({ onUpload }) {
 
 
     return (
+        <Container>
+            <Paper className="custom-container">
+                <Typography variant="h4" component="h4" gutterBottom>
+                    Font Upload Section
+                </Typography>
+                <Typography variant="body1" component="p" gutterBottom>
+                    You can upload Font here
+                </Typography>
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <DropzoneArea
@@ -48,6 +57,8 @@ function FontUpload({ onUpload }) {
                 />
             </Grid>
         </Grid>
+            </Paper>
+        </Container>
     );
 }
 

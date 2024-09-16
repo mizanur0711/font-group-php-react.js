@@ -3,6 +3,7 @@
         "phenx/php-font-lib": "^1.0",
       "ext-json": "*",
       "ext-mysqli": "*",
-      "ext-gd": "*"
+      "ext-gd": "*",
+      "ext-pdo": "*"
     }
 }

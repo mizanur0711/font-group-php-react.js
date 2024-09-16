@@ -45,4 +45,8 @@
   object-fit: contain; /* Ensures the image maintains its aspect ratio */
 }
 
+.custom-container {
+  margin: 10px;
+  padding: 10px;
+}
 
