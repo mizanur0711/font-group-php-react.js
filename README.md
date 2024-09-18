@@ -41,5 +41,5 @@ composer install
 - Go to Project root directory then run following command
 ```
 npm start
-php -S localhost:8000 -t php-backend
+php -S localhost:8000
 ```
