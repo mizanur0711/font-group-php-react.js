@@ -33,7 +33,7 @@ cd <repository-directory>
 
 ## Installation
 ```
-npm install
+npm install --legacy-peer-deps 
 cd php-backend
 composer install
 ```
